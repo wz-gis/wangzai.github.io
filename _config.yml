@@ -13,8 +13,9 @@ timezone: ''
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: https://wz-gis.github.io/wangzai.github.io
-root: /
+# Hexo 根配置
+url: https://wz-gis.github.io
+root: /wangzai.github.io/
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
