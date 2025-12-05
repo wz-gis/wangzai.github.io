@@ -61,7 +61,9 @@ exclude: null
 ignore: null
 theme: vivia
 deploy:
-  type: ''
+  type: git
+  repo: git@github.com:wz-gis/wangzai.github.io.git
+  branch: gh-pages
 asset_prefix: /
 
 archive_generator:

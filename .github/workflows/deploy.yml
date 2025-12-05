@@ -1,17 +1,19 @@
-name: Deploy Hexo
+name: Deploy Hexo to GitHub Pages
 
 on:
   push:
     branches:
-      - master  # 监听 master 分支推送
+      - master  # 监听master分支的推送
 
 jobs:
-  build-deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: master  # 检出master分支
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -22,8 +24,9 @@ jobs:
         run: |
           npm install
 
-      - name: Build Hexo
+      - name: Generate Static Files
         run: |
+          npx hexo clean
           npx hexo generate
 
       - name: Deploy to gh-pages
@@ -31,4 +34,8 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
-          publish_branch: gh-pages
+          publish_branch: gh-pages  # 推送到gh-pages分支
+          # 以下配置可选
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: ${{ github.event.head_commit.message }}
