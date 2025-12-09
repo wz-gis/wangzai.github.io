@@ -1,52 +1,34 @@
-name: Hexo CI/CD
+name: Deploy Hexo
 
 on:
   push:
     branches:
-      - master
-      - main
+      - master  # 监听 master 分支推送
 
 jobs:
-  build:
+  build-deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive
-        fetch-depth: 0
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        cache: 'npm'
-    
-    - name: Cache dependencies
-      uses: actions/cache@v3
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-    
-    - name: Install dependencies
-      run: |
-        npm ci
-    
-    - name: Build Hexo site
-      run: |
-        npx hexo clean
-        npx hexo generate
-    
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./public
-        publish_branch: gh-pages
-        user_name: "github-actions[bot]"
-        user_email: "github-actions[bot]@users.noreply.github.com"
-        commit_message: "Deploy: ${{ github.event.head_commit.message || github.sha }}"
-        full_commit_message: "🚀 Deploy from ${{ github.event.head_commit.message || github.sha }}"
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: |
+          npm install
+
+      - name: Build Hexo
+        run: |
+          npx hexo generate
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages
