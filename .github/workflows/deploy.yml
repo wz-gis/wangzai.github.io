@@ -3,7 +3,7 @@ name: Deploy Hexo
 on:
   push:
     branches:
-      - main  # 监听 main 分支推送
+      - master  # 监听 main 分支推送
 
 jobs:
   build-deploy:
