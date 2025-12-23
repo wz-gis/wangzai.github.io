@@ -29,7 +29,18 @@ external_link:
   exclude: ''
 filename_case: 0
 render_drafts: false
-post_asset_folder: false
+
+# Hexo 基础配置
+post_asset_folder: true
+# marked:
+#   prependRoot: true
+#   postAsset: true  # 关键配置，支持相对路径图片
+  
+# 可选：懒加载配置
+lazyload:
+  enable: false
+  onlypost: false
+  loadingImg: /images/loading.gif
 relative_link: false
 future: true
 syntax_highlighter: highlight.js
@@ -68,3 +79,5 @@ asset_prefix: /
 
 archive_generator:
   per_page: 0
+
+                                     

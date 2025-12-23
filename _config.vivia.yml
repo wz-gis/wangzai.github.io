@@ -23,8 +23,8 @@ hue: 250                         # The hue of the theme color (e.g. red: 0, oran
 
 # Personal info
 avatar:                             # Path to the avatar image relative to /source
-author: Your Name
-subtitle: This is the subtitle
+author: wz-web3
+subtitle: 一个金融科技程序媛的逃离日记
 links:
   - name: Twitter
     icon: fa-brands fa-twitter      # Find icon codes at https://fontawesome.com/search
@@ -80,3 +80,17 @@ comment:
 gauges_analytics: false
 google_analytics: false #UA-xxxxxx
 baidu_analytics: false # ddxxxxxxxxxxxxxxxxx In the https://hm.baidu.com/hm.js? Afterwards
+
+
+# Hexo 配置
+post_asset_folder: true
+
+# Marked 配置
+marked:
+  prependRoot: true
+  postAsset: true  # 关键！
+  
+# 如果使用资源插件
+asset_link:
+  post: true
+  version: true
