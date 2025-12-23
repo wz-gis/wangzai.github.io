@@ -296,36 +296,56 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", function() {
-    // 确保图片加载完成后再处理，或者直接处理已存在的图片
-    const images = document.querySelectorAll('.article-entry img');
-    
-    images.forEach(img => {
-      if (img.parentElement.tagName === 'A') return;
-
-      const wrapper = document.createElement('a');
-      wrapper.setAttribute('data-fancybox', 'gallery');
+    // 延迟执行以兼容懒加载
+    setTimeout(() => {
+      // 1. 获取文章内所有图片
+      const images = document.querySelectorAll('.article-entry img');
       
-      // 使用 currentSrc 获取浏览器实际解析出的完整绝对路径
-      // 这样可以避免相对路径导致的 "Image not found"
-      wrapper.href = img.currentSrc || img.src; 
+      images.forEach(img => {
+        if (img.parentElement.tagName === 'A') return;
 
-      wrapper.style.textDecoration = 'none';
-      wrapper.style.outline = 'none';
+        // 2. 获取真实地址
+        const realSrc = img.getAttribute('data-src') || img.getAttribute('data-original') || img.src;
 
-      img.parentNode.insertBefore(wrapper, img);
-      wrapper.appendChild(img);
-    });
-
-    Fancybox.bind("[data-fancybox]", {
-      // 强制 Fancybox 将内容识别为图片
-      type: "image",
-      // 解决路径包含特殊字符（如空格 %20）的问题
-      Image: {
-        Panzoom: {
-          maxScale: 2
+        const wrapper = document.createElement('a');
+        // 【关键】设置相同的 data-fancybox 值，开启翻页
+        wrapper.setAttribute('data-fancybox', 'article-gallery'); 
+        wrapper.setAttribute('href', realSrc);
+        
+        // 3. 将图片说明（Alt文字）作为标题显示在下方
+        if (img.alt) {
+          wrapper.setAttribute('data-caption', img.alt);
         }
+
+        wrapper.style.cursor = 'zoom-in';
+        img.parentNode.insertBefore(wrapper, img);
+        wrapper.appendChild(img);
+      });
+
+      // 4. 配置 Fancybox 参数
+      if (typeof Fancybox !== "undefined") {
+        Fancybox.bind('[data-fancybox="article-gallery"]', {
+          infinite: true,      // 循环播放
+          transitionEffect: "fade", // 切换效果：fade, slide, circular 等
+          Toolbar: {
+            display: {
+              left: ["infobar"],
+              middle: [],
+              right: ["iterateZoom", "slideshow", "fullScreen", "download", "thumbs", "close"],
+            }
+          },
+          Images: {
+            Panzoom: {
+              maxScale: 3,
+            },
+          },
+          // 这里的配置决定翻页体验
+          Thumbs: {
+            autoStart: true, // 开启底部缩略图
+          }
+        });
       }
-    });
+    }, 500);
   });
 </script>
 
